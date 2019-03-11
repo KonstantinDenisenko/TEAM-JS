@@ -9,29 +9,41 @@ function Barleybreak(game) {
 	var congratulation = game.querySelector(".congratulation");
 	var steps = game.querySelector(".steps");
 	var sumSteps = 0;
+    var neighborCheck = function(index) {
+        if(this.verification(index + 1)){
+            this.moveCell(index + 1, index);
+        }else if(this.verification(index - 1)){
+            this.moveCell(index - 1, index);
+        }else if(this.verification(index + 4)){
+            this.moveCell(index + 4, index);
+        }else if(this.verification(index - 4)){
+            this.moveCell(index - 4, index);
+        }
+        this.checkSequence();
+    }.bind(this);
 
-	this.addEvents = function () {
+	this.addEvents = function() {
 		for(var a = 0; a < elements.length; a++){
 			(function (a) {
-				elements[a].addEventListener("click", function () {
-					this.neighborCheck(a);
+				elements[a].addEventListener("click", function() {
+					neighborCheck(a);
 					sumSteps++;
-				}.bind(this));
-			}.bind(this))(a);
+				});
+			})(a);
 		}
 
-		window.addEventListener('load', function () {
+		window.addEventListener('load', function() {
 			this.mixCells();
 		}.bind(this));
 
-		reset.addEventListener("click", function () {
+		reset.addEventListener("click", function() {
 			this.mixCells();
 		}.bind(this));
 
-		congratulation.addEventListener("click", function () {
+		congratulation.addEventListener("click", function() {
 			cover.classList.remove("active");
 			congratulation.classList.remove("active");
-		}.bind(this));
+		});
 	};
 
 	 this.mixCells = function() {
@@ -61,20 +73,11 @@ function Barleybreak(game) {
         return Math.random() - 0.5;
     };
 
-	this.neighborCheck = function(index) {
-		if(elements[index + 1] && elements[index + 1].innerText === ""){
-			this.moveCell(index + 1, index);
-		}else if(elements[index - 1] && elements[index - 1].innerText === ""){
-			this.moveCell(index - 1, index);
-		}else if(elements[index + 4] && elements[index + 4].innerText === ""){
-			this.moveCell(index + 4, index);
-		}else if(elements[index - 4] && elements[index - 4].innerText === ""){
-			this.moveCell(index - 4, index);
-		}
-		this.checkSequence();
-	};
+	this.verification = function(index) {
+      return elements[index] && elements[index].innerText === "";
+    };
 
-	this.moveCell = function (neighboringIndex, currenIndex) {
+	this.moveCell = function(neighboringIndex, currenIndex) {
 		elements[neighboringIndex].classList.remove("empty");
 		elements[neighboringIndex].innerText = elements[currenIndex].innerText;
 		elements[currenIndex].innerText = "";
