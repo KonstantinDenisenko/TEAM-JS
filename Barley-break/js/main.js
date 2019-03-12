@@ -1,5 +1,4 @@
-var game = document.getElementById("game");
-var barleyBreak = new Barleybreak(game);
+var barleyBreak = new Barleybreak(document.getElementById("game"));
 barleyBreak.addEvents();
 
 function Barleybreak(game) {
@@ -21,6 +20,9 @@ function Barleybreak(game) {
         }
         this.checkSequence();
     }.bind(this);
+    var compareRandom = function() {
+        return Math.random() - 0.5;
+    };
 
 	this.addEvents = function() {
 		for(var a = 0; a < elements.length; a++){
@@ -49,29 +51,21 @@ function Barleybreak(game) {
 	 this.mixCells = function() {
 		sumSteps = 0;
 
-		for(var a = 0; a < elements.length; a++){
-			if(elements[a].innerText === ""){
-				elements[a].classList.remove("empty");
-			}
-		}
 		this.arrayCells = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,""];
 
-		this.arrayCells.sort(this.compareRandom);
+		this.arrayCells.sort(compareRandom);
 
 		for(var i = 0; i < this.arrayCells.length; i++){
 			elements[i].innerText = this.arrayCells[i];
 		}
 
 		for(var q = 0; q < elements.length; q++){
+            elements[q].classList.remove("empty");
 			if(elements[q].innerText === ""){
 				elements[q].classList.add("empty");
 			}
 		}
 	};
-
-    this.compareRandom = function() {
-        return Math.random() - 0.5;
-    };
 
 	this.verification = function(index) {
       return elements[index] && elements[index].innerText === "";
@@ -85,14 +79,13 @@ function Barleybreak(game) {
 	};
 
 	this.checkSequence = function() {
-		this.winSequence = "123456789101112131415";
-		this.winSequenceToo = "159132610143711154812";
+		this.winSequences = [123456789101112131415, 159132610143711154812];
 		this.currentArrayCells = "";
 
 		for(var a = 0; a < elements.length; a++){
 			this.currentArrayCells += elements[a].innerText;
 		}
-		if(this.currentArrayCells === this.winSequence || this.currentArrayCells === this.winSequenceToo){
+		if(this.winSequences.indexOf(+this.currentArrayCells) !== -1){
 			cover.classList.add("active");
 			congratulation.classList.add("active");
 			steps.innerText = sumSteps;
