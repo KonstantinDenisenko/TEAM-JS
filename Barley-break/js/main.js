@@ -50,19 +50,20 @@ function Barleybreak(game) {
 
 	 this.mixCells = function() {
 		sumSteps = 0;
+		var a;
 
 		this.arrayCells = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,""];
 
 		this.arrayCells.sort(compareRandom);
 
-		for(var i = 0; i < this.arrayCells.length; i++){
-			elements[i].innerText = this.arrayCells[i];
+		for(a = 0; a < this.arrayCells.length; a++){
+			elements[a].innerText = this.arrayCells[a];
 		}
 
-		for(var q = 0; q < elements.length; q++){
-            elements[q].classList.remove("empty");
-			if(elements[q].innerText === ""){
-				elements[q].classList.add("empty");
+		for(a = 0; a < elements.length; a++){
+            elements[a].classList.remove("empty");
+			if(elements[a].innerText === ""){
+				elements[a].classList.add("empty");
 			}
 		}
 	};
