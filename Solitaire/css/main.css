@@ -1,0 +1,147 @@
+.solitaire {
+    position: relative;
+	border: 5px solid #000;
+	border-radius: 5px;
+	width: 1000px;
+	margin: 80px auto 0 auto;
+	padding: 10px;
+	min-height: 800px;
+	background: #1b4c25 url("../img/background.jpg") no-repeat center;
+}
+.deck {
+	min-height: 170px;
+	width: 100%;
+}
+.col-3 .deck {
+	width: 30%;
+}
+.col-3 .deck:first-child {
+	margin-right: 20px;
+}
+.deck:empty {
+	width: 120px;
+	height: 165px;
+	border: 2px solid #000000;
+	border-radius: 10px;
+}
+.card {
+	width: 100%;
+	height: 170px;
+	background: url("../img/background-cards.jpg") no-repeat center;
+	font-size: 30px;
+	line-height: 25px;
+	display: flex;
+	border-radius: 10px;
+	position: relative;
+	color: transparent;
+	padding: 5px;
+	box-sizing: border-box;
+	border: 2px solid #000000;
+	float: left;
+	grid-column: 1;
+	margin-top: -160px;
+}
+.card:hover {
+	cursor: pointer;
+}
+.card:not(.open) + .card.open {
+	margin-top: -160px;
+}
+.card.open {
+	margin-top: -145px
+}
+.finishDeck .open {
+    margin-top: -170px;
+}
+.card.open:hover {
+	box-shadow: 0 0 5px 2px #ffff00;
+	cursor: pointer;
+}
+.card.active {
+	box-shadow: 0 0 5px 2px #ff0000;
+}
+.card.active:hover {
+    box-shadow: 0 0 5px 2px #ff0000;
+}
+.deck.margin .card {
+	margin-top: -170px;
+}
+.card:first-child,
+.deck.margin .card:first-child {
+	margin-top: 0;
+}
+.card:after {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.card:before {
+	position: absolute;
+	bottom: 5px;
+	left: 5px;
+}
+.spades.open {
+	color: #000;
+	background: url("../img/background-spades.jpg") no-repeat;
+}
+.clovers.open {
+	color: #000;
+	background: url("../img/background-clovers.jpg") no-repeat center;
+}
+.hearts.open {
+	color: #ea6262;
+	background: url("../img/background-hearts.jpg") no-repeat center;
+}
+.diamonds.open {
+	color: #ea6262;
+	background: url("../img/background-diamonds.jpg") no-repeat center;
+}
+.spades:after, .spades:before {
+	content: '♠';
+}
+.hearts:after, .hearts:before {
+	content: '♥';
+}
+.clovers:after, .clovers:before {
+	content: '♣';
+}
+.diamonds:after, .diamonds:before {
+	content: '♦';
+}
+.row {
+	display: flex;
+	margin-bottom: 50px;
+}
+.col {
+	width: 14.28%;
+}
+.col-3 {
+	width: 42.84%;
+}
+.col, .col-3 {
+	display: flex;
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+.reset {
+    position: absolute;
+    top: -50px;
+    left: 430px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 15px;
+    background: #1b4c25;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 5px;
+    outline: none;
+}
+.reset:hover {
+    cursor: pointer;
+    box-shadow: white 0px 0px 25px inset;
+}
