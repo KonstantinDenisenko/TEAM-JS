@@ -2,55 +2,80 @@
     var $btnReset = document.getElementById('reset');
     var cards = [];
 	var playingDecks = {
-		deckPlaying1: {array: [], cardPos: 1, click: checkCard},
-		deckPlaying2: {array: [], cardPos: 3, click: checkCard},
-		deckPlaying3: {array: [], cardPos: 6, click: checkCard},
-		deckPlaying4: {array: [], cardPos: 10, click: checkCard},
-		deckPlaying5: {array: [], cardPos: 15, click: checkCard},
-		deckPlaying6: {array: [], cardPos: 21, click: checkCard},
-		deckPlaying7: {array: [], cardPos: 28, click: checkCard},
-		deckDistribution: {array: [], cardPos: 52, click: openCardDestribution},
-		deckDistributionOpen: {array: [], click: chooseCardDistribution},
-		deckFinish1: {array: [], click: checkCard},
-		deckFinish2: {array: [], click: checkCard},
-		deckFinish3: {array: [], click: checkCard},
-		deckFinish4: {array: [], click: checkCard}
-	}
+		deckPlaying1: {cards: [], cardPos: 1, click: checkCard},
+		deckPlaying2: {cards: [], cardPos: 3, click: checkCard},
+		deckPlaying3: {cards: [], cardPos: 6, click: checkCard},
+		deckPlaying4: {cards: [], cardPos: 10, click: checkCard},
+		deckPlaying5: {cards: [], cardPos: 15, click: checkCard},
+		deckPlaying6: {cards: [], cardPos: 21, click: checkCard},
+		deckPlaying7: {cards: [], cardPos: 28, click: checkCard},
+		deckDistribution: {cards: [], cardPos: 52, click: openCardDestribution},
+		deckDistributionOpen: {cards: [], click: chooseCardDistribution},
+		deckFinish1: {cards: [], click: checkCard},
+		deckFinish2: {cards: [], click: checkCard},
+		deckFinish3: {cards: [], click: checkCard},
+		deckFinish4: {cards: [], click: checkCard}
+	};
 	var mixRandom = function() {
         return Math.random() - 0.5;
     };
 	var deckSelected = null;
     var cardSelectedNumber = null;
+    var SUIT_CARDS_QTY = 13;
+    var CARD_ONCE_NUMBER = 1;
+    var CARD_TWO_NUMBER = 2;
+    var CARD_THREE_NUMBER = 3;
+    var CARD_FOUR_NUMBER = 4;
+    var CARD_ELEVEN_NUMBER = 11;
+    var CARD_TWELVE_NUMBER = 12;
+    var CARD_FIFTYTHREE_NUMBER = 53;
+    var HINT_STEP = "Начать стопку Дома можно только с Туза. Все карты в стопке должны быть только одной масти и в таком порядке Туз, 2,3,4,5,6,7,8,9,10, Валет, Дама, Король.";
+    var MISTAKE_COLOR = "Неверный ход! На карту черной масти можно положить только карту с красной масти или наоборот и цвета должны чередоваться.";
+    var MISTAKE_SUIT = "Неверный ход! Положить карту на другую карту можно, только если эта карта следующая в последовательности. порядок следующий: Король, Дама, Валет, 10,9,8,7,6,5,4,3,2, Туз.";
 
-    
-    function fillingArrayCards() {
+    function fillArrayCards() {
 
-        for (var i = 1; i < 53; i++) {
-            var value = i%13 === 0 ? 13 : i%13;
+        for (var i = 1; i < CARD_FIFTYTHREE_NUMBER; i++) {
+            var value = i%SUIT_CARDS_QTY === 0 ? SUIT_CARDS_QTY : i%SUIT_CARDS_QTY;
             var name;
             var suit;
-            var suitGroup = Math.ceil(i/13);
-    
-            if (suitGroup === 1) {
-                suit = 'hearts';
-            } else if (suitGroup === 2) {
-                suit = 'diamonds';
-            } else if (suitGroup === 3) {
-                suit = 'clovers';
-            } else if (suitGroup === 4) {
-                suit = 'spades';
+            var color;
+            var suitGroup = Math.ceil(i/SUIT_CARDS_QTY);
+
+            switch (suitGroup) {
+                case CARD_ONCE_NUMBER:
+                    suit = 'hearts';
+                    color = 'red';
+                    break;
+                case CARD_TWO_NUMBER:
+                    suit = 'diamonds';
+                    color = 'red';
+                    break;
+                case CARD_THREE_NUMBER:
+                    suit = 'clovers';
+                    color = 'black';
+                    break;
+                case CARD_FOUR_NUMBER:
+                    suit = 'spades';
+                    color = 'black';
+                    break;
             }
-    
-            if (value === 1) {
-                name = 'A';
-            } else if (value === 11) {
-                name = 'J';
-            } else if (value === 12) {
-                name = 'Q';
-            } else if (value === 13) {
-                name = 'K';
-            } else {
-                name = String(value);
+
+            switch (value) {
+                case CARD_ONCE_NUMBER:
+                    name = 'A';
+                    break;
+                case CARD_ELEVEN_NUMBER:
+                    name = 'J';
+                    break;
+                case CARD_TWELVE_NUMBER:
+                    name = 'Q';
+                    break;
+                case SUIT_CARDS_QTY:
+                    name = 'K';
+                    break;
+                default:
+                    name = String(value);
             }
     
             cards.push({
@@ -59,47 +84,49 @@
                 value: value,
                 name: name,
                 suit: suit,
+                color: color
             });
         }
     };
 
-    function fillingGameDecks() {
+    function fillGameDecks() {
 		for (var i = 0; i < cards.length; i++) {
 			for (key in playingDecks) {
 				if (playingDecks[key].cardPos && i < playingDecks[key].cardPos) {
-					playingDecks[key].array.push(cards[i]);
+					playingDecks[key].cards.push(cards[i]);
 					
 					break;
 				}
-				
 			}
 		}
-		
-		for (key in playingDecks) {
-			if (playingDecks[key].cardPos) {
-				console.log(key);
-				if (playingDecks[key] === playingDecks.deckDistribution) {
-					playingDecks[key].array[playingDecks[key].array.length-1].isVisible = false;
-				}else {
-					playingDecks[key].array[playingDecks[key].array.length-1].isVisible = true;
-				}
-			}
-		}
+    };
+
+    function openFirstCard() {
+        for (key in playingDecks) {
+            if (playingDecks[key].cardPos) {
+                playingDecks[key].cards[playingDecks[key].cards.length-1].isVisible = playingDecks[key] !== playingDecks.deckDistribution
+            }
+        }
     };
   
     function drawTable(){
 		for (key in playingDecks) {
-			createDeck(playingDecks[key].array, document.getElementById(key));
+			createDeck(playingDecks[key].cards, document.getElementById(key));
 		}
     };
 
     function createDeck(deck, $deck){
-        var cardsHTML = '';
+        var card;
+        $deck.innerHTML = "";
 
-        for (var i=0;i<deck.length;i++) {
-            cardsHTML = cardsHTML + '<div id="'+ deck[i].id +'" class="card '+ deck[i].suit + (deck[i].isVisible ? ' open' : '') +'">'+ deck[i].name +'</div>';
+        for (var i = 0; i < deck.length; i++) {
+            card = document.createElement('div');
+            card.innerHTML = deck[i].name;
+            card.id = deck[i].id;
+            card.classList.add("card", deck[i].suit, (deck[i].isVisible ? "open" : false));
+
+            $deck.appendChild(card);
         }
-        $deck.innerHTML = cardsHTML;
     };
        
     function addEvents(){
@@ -111,27 +138,23 @@
 			})(key);
 		}
 
-        $btnReset.addEventListener("click", function () {
-            resetGame();
-        });
-
-
+        $btnReset.addEventListener("click", resetGame);
     };
 
     function openCardDestribution() {
         var clickedCard;
         var card;
 
-        if (!playingDecks.deckDistribution.array.length) {
-            while (playingDecks.deckDistributionOpen.array.length) {
-                card = playingDecks.deckDistributionOpen.array.pop();
-                card.isVisible = false;
-                playingDecks.deckDistribution.array.push(card);
-            }
-        } else {
-            clickedCard = playingDecks.deckDistribution.array.pop();
+        if (playingDecks.deckDistribution.cards.length) {
+            clickedCard = playingDecks.deckDistribution.cards.pop();
             clickedCard.isVisible = true;
-            playingDecks.deckDistributionOpen.array.push(clickedCard);
+            playingDecks.deckDistributionOpen.cards.push(clickedCard);
+        } else {
+            while (playingDecks.deckDistributionOpen.cards.length) {
+                card = playingDecks.deckDistributionOpen.cards.pop();
+                card.isVisible = false;
+                playingDecks.deckDistribution.cards.push(card);
+            }
         }
         drawTable();
     };
@@ -157,7 +180,10 @@
     };
 
     function checkGameCompletion() {
-        if (playingDecks.deckFinish1.array.length === 13 && playingDecks.deckFinish2.array.length === 13 && playingDecks.deckFinish3.array.length === 13 && playingDecks.deckFinish4.array.length === 13) {
+        if (playingDecks.deckFinish1.cards.length === SUIT_CARDS_QTY &&
+            playingDecks.deckFinish2.cards.length === SUIT_CARDS_QTY &&
+            playingDecks.deckFinish3.cards.length === SUIT_CARDS_QTY &&
+            playingDecks.deckFinish4.cards.length === SUIT_CARDS_QTY) {
             alert("Поздравляем Вы выиграли!");
             resetGame();
         }
@@ -166,11 +192,12 @@
     function resetGame() {
         cards = [];
 		for (key in playingDecks) {
-			playingDecks[key].array = [];
+			playingDecks[key].cards = [];
 		}
-        fillingArrayCards();
+        fillArrayCards();
         cards.sort(mixRandom);
-        fillingGameDecks();
+        fillGameDecks();
+        openFirstCard();
         drawTable();
     };
 
@@ -184,17 +211,16 @@
         var compareCardValue2 = 0;
         var compareCardColor1;
         var compareCardColor2;
-		
-		
-		firstDeck = playingDecks[firstDeckId].array;
-		secondDeck = playingDecks[secondDeckId].array;
 
+		firstDeck = playingDecks[firstDeckId].cards;
+		secondDeck = playingDecks[secondDeckId].cards;
 
         for (var i = 0; i < firstDeck.length; i++) {
             if (firstDeck[i].id === firstCardId) {
                 movingCardIndex = i;
                 compareCardSuit1 = firstDeck[i].suit;
                 compareCardValue1 = firstDeck[i].value;
+                compareCardColor1 = firstDeck[i].color;
             }
         }
 
@@ -202,34 +228,28 @@
             if (secondDeck[i].id === secondCardId) {
                 compareCardSuit2 = secondDeck[i].suit;
                 compareCardValue2 = secondDeck[i].value;
+                compareCardColor2 = secondDeck[i].color;
             }
         }
 
-        if (compareCardSuit1 === 'hearts' || compareCardSuit1 === 'diamonds') {
-            compareCardColor1 = "red";
-        } if (compareCardSuit1 === 'clovers' || compareCardSuit1 === 'spades') {
-            compareCardColor1 = "black";
-        } if (compareCardSuit2 === 'hearts' || compareCardSuit2 === 'diamonds') {
-            compareCardColor2 = "red";
-        } if (compareCardSuit2 === 'clovers' || compareCardSuit2 === 'spades') {
-            compareCardColor2 = "black";
-        }
-
-        if (secondDeckId === 'deckFinish1' || secondDeckId === 'deckFinish2' || secondDeckId === 'deckFinish3' || secondDeckId === 'deckFinish4') {
-            if (compareCardValue1 - 1 === compareCardValue2 && compareCardSuit1 === compareCardSuit2 || compareCardValue1 === 1) {
+        if (secondDeckId === 'deckFinish1' ||
+            secondDeckId === 'deckFinish2' ||
+            secondDeckId === 'deckFinish3' ||
+            secondDeckId === 'deckFinish4') {
+            if (compareCardValue1 - 1 === compareCardValue2 &&
+                compareCardSuit1 === compareCardSuit2 || compareCardValue1 === 1) {
                 spliceCards(firstDeck, secondDeck, movingCardIndex);
             } else {
-                alert("Начать стопку Дома можно только с Туза. Все карты в стопке должны быть только одной масти и в таком порядке Туз, 2,3,4,5,6,7,8,9,10, Валет, Дама, Король.");
+                alert(HINT_STEP);
             }
-
         } else if (compareCardValue1 === compareCardValue2 - 1 || secondDeckId === secondCardId) {
             if (compareCardColor1 !== compareCardColor2 || secondDeckId === secondCardId) {
                 spliceCards(firstDeck, secondDeck, movingCardIndex);
             } else {
-                alert("Неверный ход! На карту черной масти можно положить только карту с красной масти или наоборот и цвета должны чередоваться.");
+                alert(MISTAKE_COLOR);
             }
         } else {
-            alert("Неверный ход! Положить карту на другую карту можно, только если эта карта следующая в последовательности. порядок следующий: Король, Дама, Валет, 10,9,8,7,6,5,4,3,2, Туз.");
+            alert(MISTAKE_SUIT);
         }
     };
     
@@ -248,9 +268,10 @@
         }
     };
 	
-	fillingArrayCards();
+	fillArrayCards();
     cards.sort(mixRandom);
-    fillingGameDecks();
+    fillGameDecks();
+    openFirstCard();
 	drawTable();
 	addEvents();
 })();
