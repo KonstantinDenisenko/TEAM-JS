@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+	background: #fff url("../sourceimages/background.png") no-repeat 50% 0;
+    background-size: cover;
+    font: 13px "Open Sans", Arial, sans-serif;
+}
+.portfolio {
+    position: relative;
+    width: 1000px;
+    padding: 60px 100px;
+    margin: 0 auto;
+}
+h1 {
+    margin: 0 0 40px 0;
+}
+.nav-tab {
+    overflow: hidden;
+    white-space: nowrap;
+}
+.nav-tab-wrap {
+    display: flex;
+    justify-content: flex-start;
+    transition: transform 0.7s;
+    margin-bottom: 80px;
+}
+.item {
+    display: inline-block;
+    width: 270px;
+    vertical-align: top;
+    white-space: normal;
+}
+.item img {
+    display: block;
+    width: 190px;
+    height: 190px;
+    margin: 0 auto 20px auto;
+    border-radius: 5px;
+}
+.item-wrap {
+    margin-right: 25px;
+    background: #ffffff;
+}
+.item-wrap p {
+    margin: 0;
+}
+.item-wrap:hover {
+    cursor: pointer;
+    background: #f3f3f3;
+}
+.line-active {
+    width: 248px;
+    height: 445px;
+    padding: 20px 20px;
+}
+.active .line-active-on {
+    background: url("../sourceimages/line-active.png") no-repeat left;
+}
+.work-num {
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    border-bottom: 2px solid #ff0000;
+}
+.name-game {
+    margin: 0 0 20px 0;
+}
+.arrow {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 320px;
+}
+.arrow.visible {
+    display: block;
+}
+.arrow:hover {
+    cursor: pointer;
+}
+.arrow-left {
+    display: none;
+    left: 70px;
+    background: url("../sourceimages/arrow-left.png") no-repeat center;
+    background-size: 100%;
+}
+.arrow-right {
+    display: none;
+    right: 83px;
+    background: url("../sourceimages/arrow-right.png") no-repeat center;
+    background-size: 100%;
+}
+.arrow-left:hover {
+    background: url("../sourceimages/arrow-left-active.png") no-repeat center;
+    background-size: 100%;
+}
+.arrow-right:hover {
+    background: url("../sourceimages/arrow-right-active.png") no-repeat center;
+    background-size: 100%;
+}
+.tabs {
+    position: relative;
+    background: #ffffff;
+}
+
+.space-between {
+    display: flex;
+    width: 800px;
+    background: #ffffff;
+    justify-content: space-between;
+    padding: 30px;
+}
+.space-between h2 {
+    display: flex;
+    align-items: center;
+}
+.tab p {
+    width: 500px;
+    display: flex;
+    align-items: center;
+}
+.tab-wrap {
+    text-align: center;
+    padding-bottom: 20px;
+    background: #ffffff;
+}
