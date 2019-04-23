@@ -134,7 +134,7 @@
             checkWinner(json);
         })
         .catch(function (error) {
-            console.log(error + " - this");
+            alert(error);
         });
     };
 
