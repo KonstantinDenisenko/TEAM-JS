@@ -7,6 +7,36 @@
 	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    
+    <div id="game" class="tic-tac-toe">
+        <div id="field" class="container">
+            <div id="0" class="cell"></div>
+            <div id="1" class="cell"></div>
+            <div id="2" class="cell"></div>
+            <div id="3" class="cell"></div>
+            <div id="4" class="cell"></div>
+            <div id="5" class="cell"></div>
+            <div id="6" class="cell"></div>
+            <div id="7" class="cell"></div>
+            <div id="8" class="cell"></div>
+        </div>
+        <div class="scoreboard">
+            <form>
+                <input id="name" type="text" placeholder="Введите имя">
+            </form>
+            <h3>Выберите метку:</h3>
+            <div data-label="X" class="label">X</div>
+            <div data-label="0" class="label">0</div>
+            <button class="start-game">Начать игру</button>
+        </div>
+        <div class="spinner">
+            <img src="img/spinner-static.png">
+            <h2>Сделайте Ваш ход</h2>
+        </div>
+        <div id="competitor" class="spinner competitor">
+            <img src="img/spinner.gif">
+            <h2></h2>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
 </body>
 </html>
