@@ -1,7 +1,7 @@
 (function () {
     var $startGame = document.querySelector(".start-game");
     var $cells = document.querySelectorAll(".cell");
-    var $label = document.querySelectorAll(".label");
+    var $label = document.getElementsByName('label');
     var $name = document.getElementById("name");
     var $spiner = document.getElementById("competitor");
     var $field = document.getElementById("field");
@@ -9,37 +9,17 @@
     var name;
     var id;
     var label;
-    var headers = new Headers();
 
-    headers.append("Content-type", "application/json");
-
-    $label.forEach(function (value) {
-        (function (value) {
-            value.addEventListener("click", choiceLabel);
-        })(value);
-    });
-
-    function choiceLabel(currentLabel) {
-        $label.forEach(function (value) {
-            value.classList.remove("active");
-        });
-        currentLabel.target.classList.add("active");
-        label = currentLabel.target.dataset.label;
-    }
-
-    $startGame.addEventListener("click", function () {
-        startNewGame();
-        checkReadyToStart();
-    });
-
-    function startNewGame() {
-        $cells.forEach(function (value) {
-            value.innerHTML = "";
-        });
-    };
+    $startGame.addEventListener("click", checkReadyToStart);
 
     function checkReadyToStart() {
         name = $name.value;
+        $label.forEach(function (symbol) {
+            if (symbol.checked) {
+                label = symbol.value;
+            }
+        });
+
         if (!name && !label) {
             alert("Заполните все поля!")
         } else if (!name) {
@@ -49,123 +29,147 @@
         }  else {
             requestToStart();
         }
-    };
-    
-    function requestToStart() {
-        fetch(host + "/start" + "?name=" + name)
-            .then(function(response){
-                return response.json();
-            })
-            .then(function(json){
-                if (!json.ok) {
-                    return;
-                }
-                id = json.data.id;
 
-                if (json.data.canMove) {
-                    selectCell();
-                } else {
-                    alert("Can't Move - нет разрешения для старта");
-                }
-            })
-            .catch (function (error) {
-                alert(error);
-            });
-    };
-
-    function selectCell() {
-        $field.classList.add("field");
-        $cells.forEach(function (value) {
-            (function (value) {
-                value.addEventListener("click", requestOnMakeMove);
-            })(value);
+        $cells.forEach(function (cell) {
+            cell.innerHTML = "";
+            cell.classList.add("pointer");
         });
     };
 
-    function requestOnMakeMove(currentCell) {
-        fetch(host + "/makeMove", {
-            method: "POST",
-            body: JSON.stringify({move: currentCell.target.id, id: id, name: name}),
-            headers: headers
-        })
-        .then(function (response) {
-            return response.json();
-        })
+    function requestToStart() {
+        setWaitState();
+
+        fetch(host + "/start?name=" + name)
+        .then(checkResponse)
+        .then(chechJson)
+        .then(checkToStep)
+        .catch (handleError)
+        .finally(removeWaitState);
+    };
+
+    $cells = [].slice.apply($cells);
+    $cells.forEach(function (cell) {
+        cell.addEventListener("click", makeMove);
+    });
+
+    function makeMove() {
+        var index = $cells.indexOf(this);
+
+        requestToServer({move: index, id: id, name: name}, "/makeMove")
+        .then(checkResponse)
+        .then(checkReason)
         .then(function (json) {
-            return new Promise(function(resolve, reject) {
-                if (json.reason) {
-                    if (json.reason === "Can't find session") {
-                        reject("Начните новую ссесию! Для этого нажмите - 'НАЧАТЬ ИГРУ'");
-                    } else {
-                        reject(json.reason);
-                    }
-                } else {
-                    resolve(json);
-                }
-            });
-        })
-        .then(function (json) {
-            currentCell.target.innerHTML = label;
-            $spiner.classList.add("rivel");
-            checkWinner(json);
+            $cells[index].innerHTML = label;
+
             return json;
         })
-        .then(function (json) {
-            if (!json.data.win) {
-                requestOnWaitMove(currentCell);
-            }
-        })
-        .catch(function (error) {
-            alert(error);
-        });
+        .then(checkWinner)
+        .then(waitMove)
+        .catch(handleError)
     };
 
-    function requestOnWaitMove(currentCell) {
-        fetch(host + "/waitMove", {
+    function waitMove() {
+        requestToServer({id: id, name: name}, "/waitMove")
+        .then(checkResponse)
+        .then(showStepServer)
+        .then(checkWinner)
+        .catch(handleError)
+        .finally(removeWaitState);
+    };
+
+    function requestToServer(data, api) {
+        var headers = new Headers();
+        headers.append("Content-type", "application/json");
+        setWaitState();
+
+        return fetch(host + api, {
             method: "POST",
-            body: JSON.stringify({move: currentCell.target.id, id: id, name: name}),
+            body: JSON.stringify(data),
             headers: headers
-        })
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (json) {
-            showStepServer(json.data.move);
-            checkWinner(json);
-        })
-        .catch(function (error) {
-            alert(error);
         });
     };
 
-    function showStepServer(step) {
-        if (label === "X") {
-            document.getElementById(step).innerHTML = "0";
+    function checkResponse(response) {
+        if (response.ok) {
+            return response.json();
         } else {
-            document.getElementById(step).innerHTML = "X";
+            return Promise.reject(response.status);
         }
-        $spiner.classList.remove("rivel");
+    };
+
+    function chechJson(json) {
+        if (!json.ok) {
+            return Promise.reject(json);
+        }
+        id = json.data.id;
+
+        return json;
+    };
+
+    function checkToStep(json) {
+        if (json.data.canMove) {
+            $field.classList.add("field");
+        } else {
+            alert("Can't Move - ожидайте хода противника.");
+            waitMove({id: id, name: name});
+        }
+    };
+
+    function checkReason(json) {
+        if (json.reason) {
+            if (json.reason === "Can't find session") {
+                return Promise.reject("Начните новую ссесию! Для этого нажмите - 'НАЧАТЬ ИГРУ'");
+            } else {
+                return Promise.reject(json.reason);
+            }
+        } else {
+            return Promise.resolve(json);
+        }
     };
 
     function checkWinner(json) {
         switch (json.data.win) {
             case 0:
-                alert("Вы проиграли! Хотите еще? Выберите метку и нажмите - 'Начать Игру'");
                 enableReadyState();
-                break;
+                return Promise.reject("Вы проиграли! Хотите еще? Выберите метку и нажмите - 'Начать Игру'");
             case 1:
-                alert("ВЫ ВЫИГРАЛИ! Хотите еще? Выберите метку и нажмите - 'Начать Игру'");
                 enableReadyState();
-                break;
+                return Promise.reject("ВЫ ВЫИГРАЛИ! Хотите еще? Выберите метку и нажмите - 'Начать Игру'");
             case 2:
-                alert("НИЧЬЯ");
                 enableReadyState();
-                break;
+                return Promise.reject("НИЧЬЯ");
         }
+    };
+    
+    function handleError(mistake) {
+        alert(mistake);
+        removeWaitState();
     };
 
     function enableReadyState() {
         $spiner.classList.remove("rivel");
         $field.classList.remove("field");
+
+        $cells.forEach(function (cell) {
+            cell.classList.remove("pointer");
+        });
+    };
+
+    function setWaitState() {
+        $spiner.classList.add("rivel");
+    };
+
+    function removeWaitState() {
+        $spiner.classList.remove("rivel");
+    };
+
+    function showStepServer(json) {
+        if (label === "X") {
+            $cells[json.data.move].innerHTML = "0";
+        } else {
+            $cells[json.data.move].innerHTML = "X";
+        }
+
+        return json;
     };
 })();

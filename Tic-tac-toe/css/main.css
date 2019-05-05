@@ -30,12 +30,16 @@
     color: white;
     font-size: 60px;
     border-radius: 10px;
+    pointer-events: none;
 }
 .cell:hover {
     cursor: pointer;
     opacity: 0.5;
 }
-.scoreboard input {
+.cell.pointer {
+    pointer-events: auto;
+}
+.scoreboard .name {
     width: 150px;
     outline: none;
     border: none;
@@ -54,11 +58,14 @@
     font-size: 18px;
     text-transform: uppercase;
 }
-.label.active {
-    box-shadow: inset 0 0 15px -3px red;
-}
 .label:hover {
     cursor: pointer;
+    box-shadow: inset 0 0 15px -3px red;
+}
+input[type=radio] {
+    display: none;
+}
+input[type=radio]:checked ~ .label {
     box-shadow: inset 0 0 15px -3px red;
 }
 .start-game {

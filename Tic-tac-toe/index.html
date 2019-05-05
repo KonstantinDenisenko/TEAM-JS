@@ -9,23 +9,29 @@
 <body>
     <div id="game" class="tic-tac-toe">
         <div id="field" class="container">
-            <div id="0" class="cell"></div>
-            <div id="1" class="cell"></div>
-            <div id="2" class="cell"></div>
-            <div id="3" class="cell"></div>
-            <div id="4" class="cell"></div>
-            <div id="5" class="cell"></div>
-            <div id="6" class="cell"></div>
-            <div id="7" class="cell"></div>
-            <div id="8" class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
         </div>
         <div class="scoreboard">
             <form>
-                <input id="name" type="text" placeholder="Введите имя">
+                <input id="name" class="name" type="text" placeholder="Введите имя">
+                <h3>Выберите метку:</h3>
+                <label for="radio-1">
+                    <input type="radio" name="label" id="radio-1" value="X">
+                    <span class="label">X</span>
+                </label>
+                <label for="radio-2">
+                    <input type="radio" name="label" id="radio-2" value="0">
+                    <span class="label">0</span>
+                </label>
             </form>
-            <h3>Выберите метку:</h3>
-            <div data-label="X" class="label">X</div>
-            <div data-label="0" class="label">0</div>
             <button class="start-game">Начать игру</button>
         </div>
         <div class="spinner">
