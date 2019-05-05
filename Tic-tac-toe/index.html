@@ -7,6 +7,42 @@
 	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    
+    <div id="game" class="tic-tac-toe">
+        <div id="field" class="container">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+        </div>
+        <div class="scoreboard">
+            <form>
+                <input id="name" class="name" type="text" placeholder="Введите имя">
+                <h3>Выберите метку:</h3>
+                <label for="radio-1">
+                    <input type="radio" name="label" id="radio-1" value="X">
+                    <span class="label">X</span>
+                </label>
+                <label for="radio-2">
+                    <input type="radio" name="label" id="radio-2" value="0">
+                    <span class="label">0</span>
+                </label>
+            </form>
+            <button class="start-game">Начать игру</button>
+        </div>
+        <div class="spinner">
+            <img src="img/spinner-static.png">
+            <h2>Сделайте Ваш ход</h2>
+        </div>
+        <div id="competitor" class="spinner competitor">
+            <img src="img/spinner.gif">
+            <h2></h2>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
 </body>
 </html>

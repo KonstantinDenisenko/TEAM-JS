@@ -1,0 +1,135 @@
+#game {
+    text-align: center;
+}
+.tic-tac-toe {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    width: 475px;
+    margin: 0 auto;
+    border-radius: 10px;
+    padding: 5px;
+    background: deepskyblue;
+}
+.container {
+    width: 300px;
+    height: 300px;
+    opacity: 0.1;
+}
+.container.field {
+    opacity: 1;
+}
+.cell {
+    width: 100px;
+    height: 100px;
+    background: black;
+    line-height: 100px;
+    float: left;
+    border: 2px solid white;
+    box-sizing: border-box;
+    color: white;
+    font-size: 60px;
+    border-radius: 10px;
+    pointer-events: none;
+}
+.cell:hover {
+    cursor: pointer;
+    opacity: 0.5;
+}
+.cell.pointer {
+    pointer-events: auto;
+}
+.scoreboard .name {
+    width: 150px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 18px;
+    color: blue;
+    text-align: center;
+}
+.label {
+    padding: 5px 20px;
+    display: inline-block;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin-bottom: 152px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.label:hover {
+    cursor: pointer;
+    box-shadow: inset 0 0 15px -3px red;
+}
+input[type=radio] {
+    display: none;
+}
+input[type=radio]:checked ~ .label {
+    box-shadow: inset 0 0 15px -3px red;
+}
+.start-game {
+    display: block;
+    cursor: pointer;
+    padding: 5px 20px;
+    background: red;
+    color: white;
+    text-transform: uppercase;
+    margin: 0 auto;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+.start-game:hover {
+    background: brown;
+}
+.spinner {
+    width: 135px;
+    position: absolute;
+    top: 135px;
+    right: 22px;
+    background: #00bfff;
+    text-align: left;
+}
+.spinner img {
+    width: 75%;
+    margin-left: 13px;
+}
+.spinner h2 {
+    font-size: 16px;
+    margin: 10px 0 0 0;
+}
+.competitor {
+    display: none;
+}
+.competitor.rivel {
+    display: block;
+}
+.competitor.rivel h2{
+    text-align: left;
+    font-size: 16px;
+    margin: 0 0 0 10px;
+}
+.competitor.rivel h2:after{
+    text-align: left;
+    content: "Ожидайте хода противника";
+    animation: rivel 2s infinite ease-in-out;
+}
+@keyframes rivel {
+    from {
+        content: "Ожидайте хода противника";
+        color: black;
+    }
+    35% {
+        content: "Ожидайте хода противника.";
+        color: black;
+    }
+    70% {
+         content: "Ожидайте хода противника..";
+        color: black;
+     }
+    to {
+        content: "Ожидайте хода противника...";
+        color: black;
+    }
+}
