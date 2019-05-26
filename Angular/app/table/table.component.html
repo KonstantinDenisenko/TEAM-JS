@@ -1,0 +1,15 @@
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Post ID</th>
+    <th>Author</th>
+    <th>Email</th>
+  </tr>
+
+  <tr *ngFor="let comment of comments" (click)="selectComment(comment)" [class.selected]="comment === selectedComment">
+    <td class="text-center">{{ comment.id }}</td>
+    <td class="text-center">{{ comment.postId }}</td>
+    <td>{{ comment.name }}</td>
+    <td>{{ comment.email }}</td>
+  </tr>
+</table>

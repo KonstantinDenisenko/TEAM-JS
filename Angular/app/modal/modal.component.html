@@ -1,0 +1,15 @@
+<div class="overlay" *ngIf="comment" (click)="close()">
+  <div class="popup" [stopPropagation]="someValue" (someEvent)="onSomeEvent()">
+    <button class="close" (click)="close()">X</button>
+
+    <ul>
+      <li>ID: {{ comment.id }}</li>
+      <li>Post ID: {{ comment.postId }}</li>
+      <li>Name: {{ comment.name }}</li>
+      <li>Email: {{ comment.email }}</li>
+    </ul>
+    
+    <p>Comment:</p>
+    <p>{{ comment.body }}</p>
+  </div>
+</div>
